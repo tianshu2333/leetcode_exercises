@@ -1,10 +1,46 @@
 s = "abcabcbb"
 sep_string = list(s)
 # print(sep_string)
-print(type(sep_string))
+dic = {}
+for key,value in enumerate(sep_string):
+    dic[key] = value
+local_length = []
+# print(dic)
 for i in range(len(sep_string)):
-    mark = sep_string[i]
-    sep_string[i] = True
-    for key,value in enumerate(sep_string):
-        if value == mark:
-            sep_string[key] = False
+    mark = sep_string[0]
+    print(mark)
+    del sep_string[0]
+    print(sep_string)
+    if mark in dic:
+        print('normal')
+        local_length.append(key)
+    else:
+        print('special')
+        local_length.append(len(sep_string))
+
+print(local_length)
+# print(max(local_length))
+
+#leetcode offical result
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # 哈希集合，记录每个字符是否出现过
+        occ = set()
+        n = len(s)
+        # 右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
+        rk, ans = -1, 0
+        for i in range(n):
+            if i != 0:
+                # 左指针向右移动一格，移除一个字符
+                occ.remove(s[i - 1])
+            while rk + 1 < n and s[rk + 1] not in occ:
+                # 不断地移动右指针
+                occ.add(s[rk + 1])
+                rk += 1
+            # 第 i 到 rk 个字符是一个极长的无重复字符子串
+            ans = max(ans, rk - i + 1)
+        return ans
+
+
+
